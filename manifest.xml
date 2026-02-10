@@ -6,17 +6,17 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Ing.CsvToExcel"/>
   <Description DefaultValue="Scrivi in un file Excel uno o più file CSV"/>
-  <IconUrl DefaultValue="https://localhost:3000/assets/VENTAGLIO-32.png"/>
-  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/VENTAGLIO-64.png"/>
-  <SupportUrl DefaultValue="https://www.contoso.com/help"/> <!--url con supporto, anche solo mail per contattare-->
+  <IconUrl DefaultValue="https://stageingest.github.io/CSV_to_EXCEL/assets/VENTAGLIO-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://stageingest.github.io/CSV_to_EXCEL/assets/VENTAGLIO-64.png"/>
+  <SupportUrl DefaultValue="https://stageingest.github.io/CSV_to_EXCEL"/> <!--url con supporto, anche solo mail per contattare-->
   <AppDomains>
-    <AppDomain>https://www.contoso.com</AppDomain> <!--url app domain esempio in altri è repository github-->
+    <AppDomain>https://stageingest.github.io/CSV_to_EXCEL</AppDomain> <!--url app domain esempio in altri è repository github-->
   </AppDomains>
   <Hosts>
     <Host Name="Workbook"/> <!--indica che è un add in excel-->
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://localhost:3000/taskpane.html"/> <!--https://www.tuodominio.com/taskpane.html
+    <SourceLocation DefaultValue="https://stageingest.github.io/CSV_to_EXCEL/taskpane.html"/> <!--https://www.tuodominio.com/taskpane.html
  deve essere https pubblico, in altri è repo github-->
   </DefaultSettings>
   <Permissions>ReadWriteDocument</Permissions>
@@ -63,14 +63,14 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="https://localhost:3000/assets/VENTAGLIO-16.png"/>
-        <bt:Image id="Icon.32x32" DefaultValue="https://localhost:3000/assets/VENTAGLIO-32.png"/>
-        <bt:Image id="Icon.80x80" DefaultValue="https://localhost:3000/assets/VENTAGLIO-80.png"/>
+        <bt:Image id="Icon.16x16" DefaultValue="https://stageingest.github.io/CSV_to_EXCEL/assets/VENTAGLIO-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://stageingest.github.io/CSV_to_EXCEL/VENTAGLIO-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://stageingest.github.io/CSV_to_EXCEL/VENTAGLIO-80.png"/>
       </bt:Images>
       <bt:Urls>
         <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812"/>
-        <bt:Url id="Commands.Url" DefaultValue="https://localhost:3000/commands.html"/>
-        <bt:Url id="Taskpane.Url" DefaultValue="https://localhost:3000/taskpane.html"/>
+        <bt:Url id="Commands.Url" DefaultValue="https://stageingest.github.io/CSV_to_EXCEL/commands.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://stageingest.github.io/CSV_to_EXCEL/taskpane.html"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GetStarted.Title" DefaultValue="Get started with your sample add-in!"/>
