@@ -64,8 +64,8 @@
     <Resources>
       <bt:Images>
         <bt:Image id="Icon.16x16" DefaultValue="https://stageingest.github.io/CSV_to_EXCEL/assets/VENTAGLIO-16.png"/>
-        <bt:Image id="Icon.32x32" DefaultValue="https://stageingest.github.io/CSV_to_EXCEL/VENTAGLIO-32.png"/>
-        <bt:Image id="Icon.80x80" DefaultValue="https://stageingest.github.io/CSV_to_EXCEL/VENTAGLIO-80.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://stageingest.github.io/CSV_to_EXCEL/assets/VENTAGLIO-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://stageingest.github.io/CSV_to_EXCEL/assets/VENTAGLIO-80.png"/>
       </bt:Images>
       <bt:Urls>
         <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812"/>
