@@ -108,19 +108,19 @@ async function ReadFile(FileSelected) {
 
 // Interpretazione e formattazione del contenuto della cella 
 function setCellAs(cell) {
-  let str = cell.trim();
-  
-  if (str.startsWith('"') && str.endsWith('"')) {
-    str = str.slice(1, -1);
+  const str = cell.trim();
+  const numericStr = str.replace(/,/g, '.');
+
+  if (numericStr.includes('.') && /\d+\.\d+/.test(numericStr)) {
+    return parseFloat(numericStr);
   }
-  
-  let num = Number(str);
-  return isNaN(num) ? str : num;
+  return str;
+
 }
 
 // Formato di ogni colonna, controllando tutte le singole celle escludendo l'header
 function SetNumericFormat(CSVData) {
-  const colCount = CSVData[0].length;
+   const colCount = CSVData[0].length;
   const numericCols = Array(colCount).fill(true);
 
   for (let col = 0; col < colCount; col++) {
@@ -130,11 +130,15 @@ function SetNumericFormat(CSVData) {
     else if (CSVData[0][col].toString().toLowerCase().includes('nr.')) {
       numericCols[col] = false;
     }
-    
     for (let row = 1; row < CSVData.length; row++) {
-      if (typeof CSVData[row][col] !== "number") {
+      if (typeof CSVData[row][col] !== "number" || Number.isInteger(CSVData[row][col])) {
         numericCols[col] = false;
         break;
+      }
+      if (numericCols[col] == false) {
+        if (/\d+\.\d+/.test(CSVData[row][col])) {
+          numericCols[col] = true;
+        }
       }
     }
   }
@@ -188,7 +192,7 @@ async function createNewExcel(CSVData) {
     const isNumeric = SetNumericFormat(CSVData);
     for (let column = 0; column < colCount; column++) {
       if (isNumeric[column]) {
-        range.getColumn(column).numberFormat = [["#,##0.00;[Red]-#,##0.00"]];
+        range.getColumn(column).numberFormat = [["#,##0.00 ; [Red] -#,##0.00"]];
       }
     }
 
