@@ -225,8 +225,14 @@ async function downloadWorksheetAsWorkbook(context, worksheet, sheetName) {
     XLSX.utils.book_append_sheet(workbook, ws, sheetName);
     
     const excelFileName = sheetName + ".xlsx";
-    
-    XLSX.writeFile(workbook, excelFileName);
+    const handle = await window.showSaveFilePicker({
+      suggestedName: excelFileName,
+      types: [{ description: 'File Excel', accept: {'text/plain': ['.xlsx']} }]
+    });
+    const writable = handle.createWritable();
+    await writable.write("Contenuto esportato da Excel");
+    await writable.close();
+    //XLSX.writeFile(workbook, excelFileName);
     
     console.log(`File scaricato: ${excelFileName}`);
 
