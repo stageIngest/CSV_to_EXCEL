@@ -46,12 +46,12 @@ async function fileImport() {
     for (let i = 0; i < fileInput.files.length; i++) {
       const file = fileInput.files[i];
       const fileName = file.name;
-      console.log(`Processing: ${fileName}`);
       
       await processCSVFile(file, fileName);
     }
     
     if (workbooksToSave.length > 0) {
+      document.getElementById("fileName").textContent = "";
       await saveAllWorkbooks();
     }    
   } catch (err) {
@@ -236,7 +236,6 @@ async function createExcelWorkbook(csvData, fileName) {
 async function saveAllWorkbooks() {
   try {
     const dir = await window.showDirectoryPicker();
-    let urlSaving = dir;
     
     for (const workbookData of workbooksToSave) {
       const { name, buffer, numericCols, headers } = workbookData;
@@ -251,7 +250,6 @@ async function saveAllWorkbooks() {
       
       await writable.close();
       console.log(`Salvato: ${name}`);
-      document.getElementById("fileName").textContent = "";
       document.getElementById("fileName").textContent += `${name} SALVATO CON SUCCESSO,   `;
 
     }    
@@ -265,6 +263,3 @@ async function saveAllWorkbooks() {
   }
 }
 
-function openSavedFiles(workbookData, urlSaving) {
-  window.open(urlSaving);
-}
