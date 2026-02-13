@@ -1,11 +1,12 @@
 /* eslint-disable no-undef */
 
+const path = require("path");
 const devCerts = require("office-addin-dev-certs");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const urlDev = "https://localhost:3000/";
-const urlProd = "https://www.contoso.com/"; // CHANGE THIS TO YOUR PRODUCTION DEPLOYMENT LOCATION
+const urlProd = "https://stageingest.github.io/CSV_to_EXCEL/"; // URL GitHub Pages
 
 async function getHttpsOptions() {
   const httpsOptions = await devCerts.getHttpsServerOptions();
@@ -23,6 +24,8 @@ module.exports = async (env, options) => {
     },
     output: {
       clean: true,
+      path: path.resolve(__dirname, dev ? "dist" : "docs"),
+      filename: "[name].bundle.js",
     },
     resolve: {
       extensions: [".html", ".js"],
