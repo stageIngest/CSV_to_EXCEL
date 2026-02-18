@@ -13,6 +13,7 @@ let save;
 let saveBottom;
 let csvData;
 let fileName;
+let numericColumnsProcessed = []; //!!!
 
 Office.onReady((info) => {
   if (info.host === Office.HostType.Excel) {
@@ -66,6 +67,7 @@ async function fileImport() {
       fileName = file.name;
 
       await processCSVFile(file, fileName);
+      numericColumnsProcessed = await getNumericColumns(csvData);
       await writeInExcel(csvData, fileName);
       await createExcelWorkbook(csvData, fileName);
     }
@@ -94,13 +96,13 @@ async function writeInExcel(csvData, fileName) {
     const worksheet = context.workbook.worksheets.add(cleanName);
     const rowNo = csvData.length;
     const colNo = csvData[0].length;
-    const numericCols = getNumericColumns(csvData);
+    //const numericCols = getNumericColumns(csvData);
     const range = worksheet.getRangeByIndexes(0, 0, rowNo, colNo);
     range.values = csvData;
 
 
     for (let col = 0; col < colNo; col++) {
-      if (numericCols[col]) {
+      if (numericColumnsProcessed[col]) {
         const columnRange = worksheet.getRangeByIndexes(1, col, rowNo - 1, 1);
         columnRange.numberFormat = [["#,##0.00;[Red]-#,##0.00"]];
       }
@@ -159,11 +161,11 @@ async function processCSVFile(file, fileName) {
 // processa cella CSV, se numero decimale fa parsefloat altrimenti stringa (gli interi sono stringhe)
 function processCell(cell) {
   const str = cell.trim();
-  const numericStr = str.replace(/,/g, '.');
+  //const numericStr = str.replace(/,/g, '.');
 
-  if (/\d+\.\d+/.test(numericStr)) {
-    return parseFloat(numericStr);
-  }
+  //if (/\d+\.\d+/.test(numericStr)) {
+    //return parseFloat(numericStr);
+  //}
   return str;
 }
 
@@ -219,7 +221,7 @@ async function createExcelWorkbook(csvData, fileName) {
     }
   }
 
-  const numericCols = getNumericColumns(csvData);
+  //const numericCols = getNumericColumns(csvData);
 
   //per ogni colonna gestiamo formati, header e scrittura dei numeri, registriamo questi dati nell'array columns
   const columns = [];
@@ -230,7 +232,7 @@ async function createExcelWorkbook(csvData, fileName) {
       width: 15 //larghezza fissa di default
     };
 
-    if (numericCols[col]) {
+    if (numericColumnsProcessed[col]) {
       columnDef.style = {
         numFmt: '#,##0.00;[Red]-#,##0.00'
       };
@@ -268,7 +270,7 @@ async function createExcelWorkbook(csvData, fileName) {
   // Genera buffer Excel
   const buffer = await workbook.xlsx.writeBuffer();
 
-  const excelFileName = fileName.slice(".")[0] + ".xlsx";
+  const excelFileName = fileName.replace(/\.csv$/i, "") + ".xlsx";
 
   // Salva con metadata delle colonne numeriche
   workbooksToSave.push({
