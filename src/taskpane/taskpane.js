@@ -188,7 +188,7 @@ function getNumericColumns(csvData) {
 
       // Se è un numero decimale (non intero) hasdecimal è true per questa colonna, altrimenti false di default
       // questo perchè nel caso in una colonna decimale ci sia solo 1 decimale anche tutti gli altri interi dovranno essere scritti coerentemente
-      if (typeof value === "number" && !Number.isInteger(value)) {
+      if (typeof value === "number" && /\d+\.\d+/.test(value)) {
         hasDecimals = true;
         break; //quando trovo il primo decimale salto alla prossima colonna
       }
@@ -268,7 +268,7 @@ async function createExcelWorkbook(csvData, fileName) {
   // Genera buffer Excel
   const buffer = await workbook.xlsx.writeBuffer();
 
-  const excelFileName = sheetName + ".xlsx";
+  const excelFileName = fileInput.name.slice(".")[0] + ".xlsx";
 
   // Salva con metadata delle colonne numeriche
   workbooksToSave.push({
