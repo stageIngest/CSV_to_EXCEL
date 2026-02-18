@@ -260,7 +260,7 @@ async function createExcelWorkbook(csvData, fileName) {
   worksheet.eachRow((row, rowNumber) => {
     if (rowNumber > 1) { // Skip header (riga 1)
       row.eachCell((cell, colNumber) => {
-        if (numericCols[colNumber - 1] && typeof cell.value === 'number') {
+        if (numericColumnsProcessed[colNumber - 1] && typeof cell.value === 'number') {
           cell.numFmt = '#,##0.00;[Red]-#,##0.00';
         }
       });
@@ -276,7 +276,7 @@ async function createExcelWorkbook(csvData, fileName) {
   workbooksToSave.push({
     name: excelFileName,
     buffer: buffer,
-    numericCols: numericCols,
+    numericCols: numericColumnsProcessed,
     headers: csvData[0]
   });
 
@@ -371,6 +371,7 @@ async function regenerateExcelBuffer(csvData, numericCols, sheetName) {
   return await workbook.xlsx.writeBuffer();
 }
 
+
 // Salva tutti i workbook nella cartella selezionata, NELLA STESSA, SE NE SELEZIONA SOLO 1
 async function saveAllWorksheets() {
   try {
@@ -400,7 +401,7 @@ async function saveAllWorksheets() {
 
   for (const workbookData of workbooksToSave) { //elimino solo i foglio creati perchè se li elimino tutti excel da errore 
     const sheetName = workbookData.name.replace(".xlsx", "");
-    const sheet = sheets.items.find(s => s.name === sheetName);
+    const sheet = sheets.items.find(s => s.name === sheetName.substring(0,31));
 
     if (sheet) {
       sheet.delete();
