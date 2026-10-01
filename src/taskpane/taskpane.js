@@ -98,6 +98,9 @@ async function writeInExcel(csvData, fileName) {
     const colNo = csvData[0].length;
     //const numericCols = getNumericColumns(csvData);
     const range = worksheet.getRangeByIndexes(0, 0, rowNo, colNo);
+    csvData.forEach((r, i) => {
+  if (r.length !== colNo) console.log(`riga ${i}: ${r.length} celle invece di ${colNo}`);
+});
     range.values = csvData;
 
 
@@ -122,6 +125,7 @@ async function processCSVFile(file, fileName) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsArrayBuffer(file);
+    console.log("CSV_TO_EXCEL : gestisce testi interni con virgole, separazione basata su virgolette");
 
     reader.onload = async () => {
       try {
@@ -135,17 +139,21 @@ async function processCSVFile(file, fileName) {
           resolve();
           return;
         }
-        const rows = csvText.split(/\r?\n/).filter(r => r.trim() !== ""); //divisione per righe, esclusione righe vuote
+        const rows = csvText.split(/\r?\n/).filter(r => r.trim() !== ""); // divisione per righe, esclusione righe vuote
         if (!rows.length) {
           resolve();
           return;
         }
-        csvData = rows.map((row) => {
-          let rowForSplitting = row.replace(/"(\d+),(\d+)"/g, "$1.$2"); //formattazione campo decimale come numero.numero, semplifica lo split
-          rowForSplitting = rowForSplitting.replace(/""/g, "null");
-          const separator = rowForSplitting.includes(";") ? ";" : ","; //split righe in celle
-          return rowForSplitting.split(separator).map((cell) => processCell(cell)); //processa celle
-        });
+
+        const separator = rows[0].includes(";") ? ";" : ",";   
+        const SEP = "$53P4R4!";
+        // o un campo tra virgolette (da lasciare intatto) oppure un separatore esterno (da sostituire)
+        const outsideRe = new RegExp(`("[^"]*")|${separator}`, "g");
+
+        csvData = rows.map((row) =>
+          row.replace(outsideRe, (m, quoted) => (quoted ? quoted : SEP)).split(SEP).map((cell) => processCell(cell))
+        );
+
         resolve();
       } catch (err) {
         console.error("Errore CSV:", err);
@@ -159,9 +167,13 @@ async function processCSVFile(file, fileName) {
   });
 }
 
+// processa cella CSV: toglie le virgolette di contorno, "" vuoto resta cella vuota
 function processCell(cell) {
   let str = cell.trim();
-  if (str === "null") str = "";
+  if (str.length > 1 && str.startsWith('"') && str.endsWith('"')) {
+    str = str.slice(1, -1).replace(/""/g, '"');
+  }
+  if (/^\d+,\d+$/.test(str)) str = str.replace(",", ".");
   return str;
 }
 
