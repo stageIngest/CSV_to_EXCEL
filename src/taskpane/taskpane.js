@@ -141,7 +141,8 @@ async function processCSVFile(file, fileName) {
           return;
         }
         csvData = rows.map((row) => {
-          const rowForSplitting = row.replace(/"(\d+),(\d+)"/g, "$1.$2"); //formattazione campo decimale come numero.numero, semplifica lo split
+          let rowForSplitting = row.replace(/"(\d+),(\d+)"/g, "$1.$2"); //formattazione campo decimale come numero.numero, semplifica lo split
+          rowForSplitting = rowForSplitting.replace(/""/g, "null");
           const separator = rowForSplitting.includes(";") ? ";" : ","; //split righe in celle
           return rowForSplitting.split(separator).map((cell) => processCell(cell)); //processa celle
         });
@@ -158,14 +159,9 @@ async function processCSVFile(file, fileName) {
   });
 }
 
-// processa cella CSV, se numero decimale fa parsefloat altrimenti stringa (gli interi sono stringhe)
 function processCell(cell) {
-  const str = cell.trim();
-  //const numericStr = str.replace(/,/g, '.');
-
-  //if (/\d+\.\d+/.test(numericStr)) {
-    //return parseFloat(numericStr);
-  //}
+  let str = cell.trim();
+  if (str === "null") str = "";
   return str;
 }
 
